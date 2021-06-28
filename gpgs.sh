@@ -27,7 +27,7 @@ gpg_initialize(){
 	
 	# extract fingerprint
 	
-	GPG_FINGERPRINT="$(gpg --homedir ${GPG_TEMPDIR} --batch --quiet -k ${uid}|grep -A1 pub|tail -n1|sed -e 's/ //g')"
+	GPG_FINGERPRINT="$(gpg --homedir ${GPG_TEMPDIR} --no-emit-version --batch --quiet -k ${uid}|grep -A1 pub|tail -n1|sed -e 's/ //g')"
 	# add encyrption subkey
 	if [ "${algo}" = "ed25519" ]; then {
 		algo="cv25519";
@@ -43,7 +43,8 @@ gpg_initialize(){
 
 
 # command list
-GPGSD_COMMANDS="Commands:
+GPGSD_COMMANDS="Note: Import and Decrypt support one-liner input.
+Commands:
 I:	Import recipient's session pubkey and/or set key to encrypt to.
 E:	Encrypt and sign a message to recipient's session.
 D:	Decrypt message sent to this session.
@@ -74,7 +75,8 @@ gpgsd(){
 			"I"|"i")
 				# import key
 				printf "Paste in recipient's pubkey: (ctrl+D after paste or to skip)\n"
-				gpg --homedir ${GPG_TEMPDIR} --batch --quiet --import -a;
+				input="$(cat)"
+				printf "%s\n" "${input}"|tr "&" "\n"|gpg --homedir ${GPG_TEMPDIR} --batch --quiet --import -a;
 				# get recipient fingerprint\
 				printf "\nFollowing keys are in keychain:\n";
 				gpg --homedir ${GPG_TEMPDIR} --batch --quiet -k;
@@ -87,19 +89,21 @@ gpgsd(){
 			"E"|"e")
 				# encrypt to recipient
 				printf "Message to encrypt: (ctrl+D when done)\n";
-				gpg --homedir ${GPG_TEMPDIR} --batch --quiet --passphrase "${GPG_PASSPHRASE}" --pinentry-mode loopback -ase --hidden-recipient "${GPG_RECIPIENT}" --personal-digest-preferences "SHA512 SHA384 SHA256";
+				gpg --homedir ${GPG_TEMPDIR} --no-emit-version --batch --quiet --passphrase "${GPG_PASSPHRASE}" --pinentry-mode loopback -ase --no-throw-keyids -R "${GPG_RECIPIENT}" --personal-digest-preferences "SHA512 SHA384 SHA256";
 				printf "\n";
 				;;
 			"D"|"d")
 				# decrypt
 				printf "Enter message to decrypt: (ctrl+D when done)\n"
-				gpg --homedir ${GPG_TEMPDIR} --batch --quiet --passphrase "${GPG_PASSPHRASE}" --pinentry-mode loopback --decrypt -a;
+				input="$(cat)"
+				printf "\nDecrypted message:\n";
+				printf "%s\n" "${input}"|tr "&" "\n"|gpg --homedir ${GPG_TEMPDIR} --batch --quiet --passphrase "${GPG_PASSPHRASE}" --pinentry-mode loopback --decrypt -a;
 				printf "\n";
 				;;
 			"S"|"s")
 				# clearsign
 				printf "Enter your message to clearsign: (ctrl+D to end)\n";
-				gpg --homedir ${GPG_TEMPDIR} --batch --quiet --passphrase "${GPG_PASSPHRASE}" --pinentry-mode loopback --clearsign --personal-digest-preferences "SHA512 SHA384 SHA256";
+				gpg --homedir ${GPG_TEMPDIR} --no-emit-version --batch --quiet --passphrase "${GPG_PASSPHRASE}" --pinentry-mode loopback --clearsign --personal-digest-preferences "SHA512 SHA384 SHA256";
 				printf "\n";
 				;;
 			"V"|"v")
