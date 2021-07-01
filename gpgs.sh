@@ -203,7 +203,7 @@ confirmExit(){
 	trap "" TERM;   # SIGTERM
 	
 	# confirmation prompt
-	printf "\n\nDo you want to exit? (Y/n): ";
+	printf "\n\nDo you want to exit? (y/N): ";
 	local prompt;
 	read prompt;
 	case  "${prompt}" in
