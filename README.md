@@ -86,7 +86,7 @@ To change which ephemeral public key (if imported already) to encrypt to, use th
 
 One-liner functionality is provided for you to easily send messages on platforms that do not support entering newlines as part of the message, eg IRC or [ssh-chat](https://github.com/shazow/ssh-chat). Commands `C` and `V` do not support one-liner input or output as clear-signed messages could have the `&` character as part of the message.
 
-You can use `ctrl+C` to quit with a prompt, and `ctrl+\\` to quit quickly (for people who have the habit of terminating a incorrect input using `ctrl+C`). `ctrl+Z` is not supported, and you can unfreeze your terminal if you accidentally pressed `ctrl+S` with `ctrl+Q`!
+You can use `ctrl+C` to quit with a prompt, and `ctrl+\` to quit quickly (for people who have the habit of terminating a incorrect input using `ctrl+C`). `ctrl+Z` is not supported, and you can unfreeze your terminal if you accidentally pressed `ctrl+S` with `ctrl+Q`!
 
 
 ### Improvements and Bug-fixes!
