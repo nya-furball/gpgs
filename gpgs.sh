@@ -43,7 +43,7 @@ gpg_initialize(){
 
 
 # command list
-GPGSD_COMMANDS="Note: Import and Decrypt support one-liner input.
+GPGSD_COMMANDS="Note: Import and Decrypt support one-liner formatted messages.
 Commands:
 I:	Import recipient's session pubkey and/or set key to encrypt to.
 E:	Encrypt and sign a message to recipient's session.
