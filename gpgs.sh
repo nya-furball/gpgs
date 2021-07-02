@@ -3,7 +3,7 @@
 
 UMASK_ORIG="$(umask)"
 UID_SESSION="$(openssl rand -hex 16)";	# session UUID
-GPG_TEMPDIR="$(mount|grep -e tmpfs |cut -d ' ' -f 3|grep -e shm)/gpgs-session-${UID_SESSION}"
+GPG_TEMPDIR=""
 
 
 # initialize gpg_dir
@@ -172,8 +172,9 @@ cleanup(){
 }
 
 
-ramcheck(){
+ramcheck_linux(){
 	# check if /dev/shm or /var/run/shm exists
+	GPG_TEMPDIR="$(mount|grep -e tmpfs |cut -d ' ' -f 3|grep -e shm)/gpgs-session-${UID_SESSION}";
 	if [ "$(printf "${GPG_TEMPDIR}"|grep '/shm/')" = "" ]; then {
 		printf "/dev/shm not detected. Exiting.\n";
 		exit 1;
@@ -222,7 +223,7 @@ confirmExit(){
 
 
 main(){
-	ramcheck;
+	ramcheck_linux;
 	initialize;
 	
 	# main loop
