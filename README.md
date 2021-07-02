@@ -80,6 +80,8 @@ Q:	Quit session. (ctrl+C or interrupts also work).
 
 The default key UID generation pattern is `test-` + a randomly generated UUID. To make it easier for your recipient to import generated ephemeral keys, you can customize the prefix in the script by editing the variable `UID_PREFFIX` in the script. DO NOT USE `-` AS THE FIRST CHARACTER OR THE SCRIPT BREAKS!
 
+If you run into the error `Warning: there are active swapfiles/partitions!`, you can deactivate all swap partitions by running ``swapoff -a` as root or manually deactivating non-volatile swapfiles/partitions.
+
 To change which ephemeral public key (if imported already) to encrypt to, use the `I` command. Do not enter anything in the first prompt and press `ctrl+D`, then enter the FINGERPRINT in the second prompt after keys are listed. IT IS NOT RECOMMENDED TO ENCRYPT TO MULTIPLE SESSIONS. START A NEW SESSION IF NECESSARY. 
 
 One-liner functionality is provided for you to easily send messages on platforms that do not support entering newlines as part of the message, eg IRC or [ssh-chat](https://github.com/shazow/ssh-chat). Commands `C` and `V` do not support one-liner input or output as clear-signed messages could have the `&` character as part of the message.
@@ -93,5 +95,3 @@ If you find any oversights or flaws in the documentation, overall threat model, 
 
 
 #### README TODO
-- Threat model and expectations 
-- Commands and Syntax
