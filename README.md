@@ -1,11 +1,10 @@
 # gpgs
 
-A user-friendly script to secure synchronous communications using ephemeral GPG keys.
-
+A user-friendly script to secure synchronous communications using ephemeral GPG keys and protect against client compromise in the future.
 
 ### DISCLAIMER:
 
-This tool is provided without any liability to the author or contributors of this project. </br>This tool and GPG are NOT SILVER BULLETS. Understand your situation, what you are trying accomplish, who are you up against and what can your adversaries do. The author of the program is NOT a cryptographer, nor can they offer professional advice in situations where lives are endangered due to disclosure of information/metadata and/or compromises in operational security. 
+This tool is provided without any liability to the author or contributors of this project. </br>This tool and GPG are NOT SILVER BULLETS. Understand your situation, what you are trying accomplish, who are you up against and what can your adversaries do. </br>The author of the program is NOT a cryptographer, nor can they offer professional advice in situations where lives are endangered due to disclosure of information/metadata and/or compromises in operational security. If you are up against well funded and determined adversaries (eg. nation states), DO NOT RELY ON JUST THIS SCRIPT! THIS TOOL CANNOT PROTECT YOU AGAINST TORTURE! 
 
 This tool is intended to be used by users with:
 
@@ -15,17 +14,22 @@ This tool is intended to be used by users with:
 A understanding more than just a high level overview of how to use GPG is required. You need to understand how to use GPG practically against your adversaries in order to prevent fuck-ups during your communications process. It is also recommended for you to have a solid understanding of public key cryptography before using the script. The cryptography used in this tool is NOT quantum-resistant.
 
 
+
 ### Features and Limitations:
 
 #### Limitations:
 This script CANNOT: 
 
 - Secure messages encrypted on a compromised client
-- Protect you against untrustworthy recipients
+- Protect you against untrustworthy or compromised recipients
+- Protect you and your recipient against being physically compromised by torture
 - Prevent you from getting [MITMed](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) IF you do not establish trust securely prior to using the script 
-- Protect you AND/OR your recipient against being [rubber-hosed](https://en.wikipedia.org/wiki/Rubber-hose_cryptanalysis) (see xkcd [#538](https://xkcd.com/538/)) for specific message contents if an adversary knows enough context to determine what might be sent in the past 
+- Protect your long term identity from compromise
+- Protect you AND/OR your recipient against being [rubber-hosed](https://en.wikipedia.org/wiki/Rubber-hose_cryptanalysis) (see xkcd [#538](https://xkcd.com/538/)) for the actual messages (contrast compelled to give up key material below), eg:
+  - an adversary knows enough context to determine what might be sent in the past and tortures you to tell them what you said to your friend instead of giving them your keys to decrypt messages
 - Protect against adversaries using quantum computers to recover encrypted messages captured in the past
 - Protect your metadata
+- Provide deniability/repudiability (not part of design goal, see [pgpfan:repudiability](https://articles.59.ca/doku.php?id=pgpfan:repudiability) and other articles on [pgpfan](https://articles.59.ca/doku.php?id=pgpfan:index) for reasons)
 
 #### Features:
 IF AND ONLY IF both clients (sender/receiver) are not compromised AND you are not being [MITMed](https://en.wikipedia.org/wiki/Man-in-the-middle_attack), this script CAN:
@@ -43,26 +47,50 @@ A client is considered compromised in the scope of this project IF:
   - [TEMPEST](https://en.wikipedia.org/wiki/Tempest_\(codename\)) attacks against a wireless keyboard
 - Your adversary can recover the key-pairs and passphrase, eg:
   - key-pairs and/or passphrase get stored onto ANY TYPE of non-volatile medium, eg:
-     - Intel(R) Optane(tm) DCPMM modules configured as system memory
+     - Intel(R) Optane(tm) DCPMM modules configured as system memory (SCRIPT CANNOT CHECK FOR THIS OR SIMILAR SCENARIOS!)
      - Swapfile/partition on HDD or SSD
   - Admins gain access to the ephemeral GPG homedir on a multi-user system
   - Your VPS provider dumps the memory content and performs memory forensics
 
 
 
-### Threat Model and Expectations:
-(TODO)
-
-
-
 ### Example Case Study:
 
-Alice and Bob would like to set up a method to indicate they are compromised while under coercion and active surveillance. Ideally, the decision is agreed upon and communicated without leaving traces or using ephemeral keys to prevent Eve from knowing enough context to [rubber-hose](https://en.wikipedia.org/wiki/Rubber-hose_cryptanalysis) Alice and/or Bob for their method. </br>To indicate compromise, both decide on using specific phrases and responses, which appear to be innocuous to observers who do not know the real context behind those phrases and the existence of said method. To prevent Eve from knowing the specifics, they both use ephemeral keys to prevent future recovery after being compromised and forced to turn over keys and access to their clients. </br>To prevent being [MITMed](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) when exchanging ephemeral keys generated by this script, Alice and Bob exchange their long term GPG identities through a secure channel AND establish that those GPG identity keys actually belong to their respective owners. </br>After establishing trust, both Alice and generate an ephemeral key in the script. Alice signs her ephemeral key with her identity key, and encrypts the ephemeral key to Bob's identity key. Bob decrypts Alice's ephemeral key using his identity key and verifies Alice's signature. He then imports Alice's ephemeral key into the script and signs his ephemeral key with his identity key, and encrypts it to Alice's ephemeral key. Alice decrypts Bob's ephemeral key using the script and verifies Bob's signature. She then imports Bob's ephemeral key into the script. </br>From this point on, both of them encrypt to their respective ephemeral keys using the script to discuss what phrases to use when indicating compromise. After deciding on the phrases and practicing, both quit the script and carry on with their business.
+Alice and Bob would like to set up a method to indicate they are compromised while under coercion and active surveillance. Ideally, the decision is agreed upon and communicated without leaving traces or using ephemeral keys to prevent Eve from knowing enough context to [rubber-hose](https://en.wikipedia.org/wiki/Rubber-hose_cryptanalysis) Alice and/or Bob for their method. </br>To indicate compromise, both decide on using specific phrases and responses, which appear to be innocuous to observers who do not know the real context behind those phrases and the existence of said method. To prevent Eve from knowing the specifics, they both use ephemeral keys to prevent future recovery after being compromised and forced to turn over keys and access to their clients. </br>To prevent being [MITMed](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) when exchanging ephemeral keys generated by this script, Alice and Bob exchange their long term GPG identities through a secure channel AND establish that those GPG identity keys actually belong to their respective owners. </br>After establishing trust, both Alice and generate an ephemeral key in the script. Alice signs her ephemeral public key with her identity key, and encrypts the ephemeral key to Bob's identity public key. Bob decrypts Alice's ephemeral public key using his identity key and verifies Alice's signature. He then imports Alice's ephemeral public key into the script and signs his ephemeral public key with his identity key, and encrypts it to Alice's ephemeral public key. Alice decrypts Bob's ephemeral key using the script and verifies Bob's signature. She then imports Bob's ephemeral public key into the script. </br>From this point on, both of them encrypt to their respective ephemeral public keys using the script to discuss what phrases to use when indicating compromise. After deciding on the phrases and practicing, both kill the ephemeral session by exiting the script and carry on with their business.
 
+
+
+### Usage and Syntax
+
+User interface should be pretty self explanatory. Start the script and it should loop and prompt you for what to do. Here are the commands supported:
+
+```
+Note: Import and Decrypt support one-liner formatted messages.
+Commands:
+I:	Import recipient's session pubkey and/or set key to encrypt to.
+E:	Encrypt and sign a message to recipient's session.
+D:	Decrypt message sent to this session.
+S:	Clearsign message with this session.
+V:	Verify messages sent to this session.
+P:	Print your session fingerprint and public key.
+O:	Convert pubkey/messages w/ newlines to a one-liner
+M:	Convert a one-liner back to a pubkey/message w/ newline.
+Q:	Quit session. (ctrl+C or interrupts also work).
+```
+
+The default key UID generation pattern is `test-` + a randomly generated UUID. To make it easier for your recipient to import generated ephemeral keys, you can customize the prefix in the script by editing the variable `UID_PREFFIX` in the script. DO NOT USE `-` AS THE FIRST CHARACTER OR THE SCRIPT BREAKS!
+
+To change which ephemeral public key (if imported already) to encrypt to, use the `I` command. Do not enter anything in the first prompt and press `ctrl+D`, then enter the FINGERPRINT in the second prompt after keys are listed. IT IS NOT RECOMMENDED TO ENCRYPT TO MULTIPLE SESSIONS. START A NEW SESSION IF NECESSARY. 
+
+One-liner functionality is provided for you to easily send messages on platforms that do not support entering newlines as part of the message, eg IRC or [ssh-chat](https://github.com/shazow/ssh-chat). Commands `C` and `V` do not support one-liner input or output as clear-signed messages could have the `&` character as part of the message.
+
+You can use ``ctrl+C` to quit with a prompt, and `ctrl+\` to quit quickly (for people who have the habit of terminating a incorrect input using `ctrl+C`). `ctrl+Z` is not supported, and you can unfreeze your terminal if you accidentally pressed `ctrl+S` with `ctrl+Q`!
 
 
 ### Improvements and Bug-fixes!
-If you find any oversights or flaws in the overall threat model, cryptography or implementation, PLEASE FILE AN ISSUE! Everyone is welcome to audit this tool, no matter if you're a enthusiast, cipherpunk, or a professional cryptologist! I am very happy to discuss those shortfalls and improve the overall implementation! Also, feel free to file issues if you find bugs in the software or you would like to suggest improvements in the UI!
+If you find any oversights or flaws in the documentation, overall threat model, cryptography or implementation, PLEASE FILE AN ISSUE! Everyone is welcome to audit this tool, no matter if you're a enthusiast, cipherpunk, or a professional cryptologist! I am very happy to discuss those shortfalls and improve the overall implementation! Also, feel free to file issues if you find bugs in the software or you would like to suggest improvements in the UI!
+
+
 
 #### README TODO
 - Threat model and expectations 
