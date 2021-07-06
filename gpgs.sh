@@ -89,7 +89,7 @@ gpgsd(){
 			"E"|"e")
 				# encrypt to recipient
 				printf "Message to encrypt: (ctrl+D when done)\n";
-				gpg --homedir ${GPG_TEMPDIR} --no-emit-version --batch --quiet --passphrase "${GPG_PASSPHRASE}" --pinentry-mode loopback -ase --no-throw-keyids -R "${GPG_RECIPIENT}" --personal-digest-preferences "SHA512 SHA384 SHA256";
+				gpg --homedir ${GPG_TEMPDIR} --no-emit-version --batch --quiet --passphrase "${GPG_PASSPHRASE}" --pinentry-mode loopback -ase --throw-keyids -R "${GPG_RECIPIENT}" --personal-digest-preferences "SHA512 SHA384 SHA256";
 				printf "\n";
 				;;
 			"D"|"d")
