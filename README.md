@@ -4,7 +4,7 @@ A user-friendly script to secure synchronous communications using ephemeral GPG 
 
 ### DISCLAIMER:
 
-This tool is provided without any liability to the author or contributors of this project. </br>This tool and GPG are NOT SILVER BULLETS. Understand your situation, what you are trying accomplish, who are you up against and what can your adversaries do. </br>The author of the program is NOT a cryptographer, nor can they offer professional advice in situations where lives are endangered due to disclosure of information/metadata and/or compromises in operational security. If you are up against well funded and determined adversaries (eg. nation states), DO NOT RELY ON JUST THIS SCRIPT! THIS TOOL CANNOT PROTECT YOU AGAINST TORTURE! 
+THIS TOOL IS NOT READY FOR PRODUCTION!</br>This tool is provided without any liability to the author or contributors of this project. </br>This tool and GPG are NOT SILVER BULLETS. Understand your situation, what you are trying accomplish, who are you up against and what can your adversaries do. </br>The author of the program is NOT a cryptographer, nor can they offer professional advice in situations where lives are endangered due to disclosure of information/metadata and/or compromises in operational security. If you are up against well funded and determined adversaries (eg. nation states), DO NOT RELY ON JUST THIS SCRIPT! THIS TOOL CANNOT PROTECT YOU AGAINST TORTURE! 
 
 This tool is intended to be used by users with:
 
